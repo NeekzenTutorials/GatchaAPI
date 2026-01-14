@@ -21,9 +21,12 @@ services:
     environment:
       SERVER_PORT: 8080
       SPRING_DATA_MONGODB_URI: mongodb://root:rootpw@central-mongo:27017/central_db?authSource=admin
-      JAVA_OPTS: >-
-        -Dserver.port=8080
-        -Dspring.data.mongodb.uri=mongodb://root:rootpw@central-mongo:27017/central_db?authSource=admin
+    depends_on:
+      - central-mongo
+    ports:
+      - "8080:8080"
+    networks:
+    - central-net
 
 
   # ================== AUTH ==================

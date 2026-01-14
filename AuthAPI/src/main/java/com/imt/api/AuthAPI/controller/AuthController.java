@@ -33,4 +33,9 @@ public class AuthController {
   public UserResponse me(@RequestParam String email) {
     return authService.findByEmail(email);
   }
+
+  @GetMapping("/validate")
+  public ValidateResponse validate(@RequestHeader("Authorization") String authHeader) {
+    return authService.validateAndRefresh(authHeader);
+  }
 }
