@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.imt.api</groupId>
-	<artifactId>projetApi</artifactId>
+	<artifactId>CentralAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>projetApi</name>
+	<name>centralAPI</name>
 	<description>Projet API for IMT</description>
 	<url/>
 	<licenses>

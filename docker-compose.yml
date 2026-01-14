@@ -1,0 +1,68 @@
+services:
+  # ================== CENTRAL ==================
+  central-mongo:
+    image: mongo:7
+    container_name: central-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpw
+      MONGO_INITDB_DATABASE: central_db
+    volumes:
+      - central_mongo_data:/data/db
+    networks:
+      - central-net
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+
+  central-api:
+    build:
+      context: ./CentralAPI
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATA_MONGODB_URI: mongodb://root:rootpw@central-mongo:27017/central_db?authSource=admin
+      JAVA_OPTS: >-
+        -Dserver.port=8080
+        -Dspring.data.mongodb.uri=mongodb://root:rootpw@central-mongo:27017/central_db?authSource=admin
+
+
+  # ================== AUTH ==================
+  auth-mongo:
+    image: mongo:7
+    container_name: auth-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpw
+      MONGO_INITDB_DATABASE: auth_db
+    volumes:
+      - auth_mongo_data:/data/db
+    networks:
+      - auth-net
+    restart: unless-stopped
+    ports:
+      - "27019:27017"
+
+  auth-api:
+    build:
+      context: ./AuthAPI
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATA_MONGODB_URI: mongodb://root:rootpw@auth-mongo:27017/auth_db?authSource=admin
+    depends_on:
+      - auth-mongo
+    ports:
+      - "8081:8080"
+    networks:
+    - auth-net
+
+  
+
+volumes:
+  auth_mongo_data:
+  central_mongo_data:
+
+networks:
+  auth-net:
+    driver: bridge
+  central-net:
+    driver: bridge

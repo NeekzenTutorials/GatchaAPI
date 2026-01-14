@@ -1,13 +1,13 @@
-package com.imt.api.projetApi;
+package com.imt.api.CentralAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ProjetApiApplication {
+public class CentralApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ProjetApiApplication.class, args);
+		SpringApplication.run(CentralApiApplication.class, args);
 	}
 
 }
