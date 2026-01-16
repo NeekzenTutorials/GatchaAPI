@@ -38,12 +38,24 @@ public class PlayerService {
   public PlayerResponse gainXp(String pseudo, long amount) {
     var p = getByPseudoOrThrow(pseudo);
 
+    if (amount <= 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "XP amount must be > 0");
+    }
+
     if (p.getLevel() >= 50) {
-      // au max, on peut décider de bloquer l'xp
       return toResponse(p);
     }
 
     p.setExperience(p.getExperience() + amount);
+
+    while (p.getLevel() < 50 && p.getExperience() >= p.getNextLevelXp()) {
+      p.setExperience(p.getExperience() - p.getNextLevelXp());
+      p.setLevel(p.getLevel() + 1);
+
+      long next = (long) Math.ceil(p.getNextLevelXp() * 1.1);
+      p.setNextLevelXp(next);
+    }
+
     repo.save(p);
     return toResponse(p);
   }
@@ -59,17 +71,17 @@ public class PlayerService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Not enough XP to level up");
     }
 
-    // reset xp + increase level
+    // consomme le seuil, ne reset pas tout
+    p.setExperience(p.getExperience() - p.getNextLevelXp());
     p.setLevel(p.getLevel() + 1);
-    p.setExperience(0);
 
-    // next threshold: ceil(x * 1.1)
     long next = (long) Math.ceil(p.getNextLevelXp() * 1.1);
     p.setNextLevelXp(next);
 
     repo.save(p);
     return toResponse(p);
   }
+
 
   public PlayerResponse acquireMonster(String pseudo, String monsterId) {
     var p = getByPseudoOrThrow(pseudo);
