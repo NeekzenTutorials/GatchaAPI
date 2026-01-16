@@ -28,6 +28,7 @@ services:
     networks:
     - central-net
     - auth-net
+    - player-net
 
 
   # ================== AUTH ==================
@@ -59,14 +60,47 @@ services:
     networks:
     - auth-net
 
-  
+
+  # ================== PLAYER ==================
+
+  player-mongo:
+    image: mongo:7
+    container_name: player-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpw
+      MONGO_INITDB_DATABASE: player_db
+    volumes:
+      - player_mongo_data:/data/db
+    networks:
+      - player-net
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+
+  player-api:
+    build:
+      context: ./PlayerAPI
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATA_MONGODB_URI: mongodb://root:rootpw@player-mongo:27017/player_db?authSource=admin
+    depends_on:
+      - player-mongo
+    ports:
+      - "8082:8080"
+    networks:
+      - player-net
+    restart: unless-stopped
 
 volumes:
   auth_mongo_data:
   central_mongo_data:
+  player_mongo_data:
 
 networks:
   auth-net:
     driver: bridge
   central-net:
+    driver: bridge
+  player-net:
     driver: bridge
