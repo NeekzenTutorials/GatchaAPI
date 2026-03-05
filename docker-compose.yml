@@ -29,6 +29,7 @@ services:
     - central-net
     - auth-net
     - player-net
+    - monster-net
 
 
   # ================== AUTH ==================
@@ -92,10 +93,43 @@ services:
       - player-net
     restart: unless-stopped
 
+
+  # ================== MONSTER ==================
+
+  monster-mongo:
+    image: mongo:7
+    container_name: monster-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpw
+      MONGO_INITDB_DATABASE: monster_db
+    volumes:
+      - monster_mongo_data:/data/db
+    networks:
+      - monster-net
+    restart: unless-stopped
+    ports:
+      - "27021:27017"
+
+  monster-api:
+    build:
+      context: ./MonsterAPI
+    environment:
+      SERVER_PORT: 8080
+      SPRING_DATA_MONGODB_URI: mongodb://root:rootpw@monster-mongo:27017/monster_db?authSource=admin
+    depends_on:
+      - monster-mongo
+    ports:
+      - "8083:8080"
+    networks:
+      - monster-net
+    restart: unless-stopped
+
 volumes:
   auth_mongo_data:
   central_mongo_data:
   player_mongo_data:
+  monster_mongo_data:
 
 networks:
   auth-net:
@@ -103,4 +137,6 @@ networks:
   central-net:
     driver: bridge
   player-net:
+    driver: bridge
+  monster-net:
     driver: bridge
