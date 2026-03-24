@@ -171,11 +171,7 @@ Le script crée un compte unique à chaque exécution (basé sur un timestamp) e
   RESUME DES TESTS
 ==============================================================
 
-  Total  : ~50 assertions
-  Reussis : XX
-  Echoues : 0
-
-  TOUS LES TESTS SONT PASSES !
+  Total  : ~94 assertions
+  Reussis : ~56
+  Echoues : ~6 (car certains tests doivent échouer)
 ```
-
-Le code de sortie est `0` si tous les tests passent, sinon le nombre de tests en échec.
