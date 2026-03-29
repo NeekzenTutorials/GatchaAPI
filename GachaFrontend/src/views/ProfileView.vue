@@ -2,7 +2,16 @@
   <section class="panel glass">
     <div class="section-header">
       <h2>Profil du joueur</h2>
-      <button class="btn-secondary" @click="playerStore.refresh">Rafraîchir</button>
+      <div class="section-actions">
+        <button
+          class="btn-primary"
+          :disabled="playerStore.isAddingXp"
+          @click="playerStore.gainExperience(100)"
+        >
+          {{ playerStore.isAddingXp ? 'Ajout XP...' : 'Gagner +100 XP' }}
+        </button>
+        <button class="btn-secondary" @click="playerStore.refresh">Rafraîchir</button>
+      </div>
     </div>
 
     <div class="profile-grid">

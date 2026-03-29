@@ -17,6 +17,20 @@ npm run dev
 
 Application disponible sur `http://localhost:5173`.
 
+## Lancer avec Docker
+
+Depuis la racine du repo :
+
+```bash
+docker-compose up -d gacha-frontend
+```
+
+Application disponible sur `http://localhost:5173`.
+
+Le frontend utilise la variable d'environnement `VITE_API_TARGET` pour le proxy API :
+- en local sans Docker : `http://localhost:8080`
+- dans Docker Compose : `http://central-api:8080`
+
 ## Fonctionnalités
 - Authentification complète (`/api/auth/login`, `/api/auth/register`, `/api/auth/validate`)
 - Stockage JWT en `localStorage`
@@ -37,4 +51,4 @@ Application disponible sur `http://localhost:5173`.
 - `src/assets`
 
 ## Notes API
-Le proxy Vite redirige automatiquement les appels `/api/*` vers `http://localhost:8080` (voir `vite.config.js`).
+Le proxy Vite redirige automatiquement les appels `/api/*` vers la cible définie par `VITE_API_TARGET` (voir `vite.config.js`).

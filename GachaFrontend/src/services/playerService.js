@@ -9,4 +9,8 @@ export const playerService = {
     const { data } = await apiClient.get('/api/player/level');
     return data;
   },
+  async addExperience(amount) {
+    const { data } = await apiClient.post('/api/player/xp', { amount });
+    return data;
+  },
 };

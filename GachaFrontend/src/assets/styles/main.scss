@@ -310,6 +310,14 @@ a {
   gap: 0.75rem;
 }
 
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .monster-grid {
   margin-top: 1rem;
   display: grid;

@@ -6,6 +6,7 @@ export const usePlayerStore = defineStore('player', {
   state: () => ({
     profile: null,
     levelData: null,
+    isAddingXp: false,
   }),
   getters: {
     currentXp: (state) => Number(state.levelData?.experience ?? state.profile?.experience ?? 0),
@@ -49,6 +50,21 @@ export const usePlayerStore = defineStore('player', {
     },
     async refresh() {
       await Promise.all([this.fetchProfile(), this.fetchLevel()]);
+    },
+    async gainExperience(amount = 100) {
+      const ui = useUiStore();
+      if (this.isAddingXp) return;
+
+      this.isAddingXp = true;
+      try {
+        await playerService.addExperience(amount);
+        ui.notify(`+${amount} XP ajoutée`, 'success');
+        await this.refresh();
+      } catch (error) {
+        ui.notify(error?.response?.data?.message || "Impossible d'ajouter de l'XP", 'error');
+      } finally {
+        this.isAddingXp = false;
+      }
     },
   },
 });
