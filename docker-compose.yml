@@ -158,6 +158,21 @@ services:
       - invocation-net
     restart: unless-stopped
 
+  # ================== FRONTEND ==================
+
+  gacha-frontend:
+    build:
+      context: ./GachaFrontend
+    environment:
+      VITE_API_TARGET: http://central-api:8080
+    depends_on:
+      - central-api
+    ports:
+      - "5173:5173"
+    networks:
+      - central-net
+    restart: unless-stopped
+
 volumes:
   auth_mongo_data:
   central_mongo_data:

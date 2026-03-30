@@ -37,9 +37,22 @@ Chaque service a sa propre base MongoDB. La communication inter-services passe p
 docker-compose up -d
 ```
 
+Cette commande démarre maintenant aussi le frontend Vue via Docker :
+- Frontend : http://localhost:5173
+
 Les services seront disponibles :
 - **Swagger UI** : http://localhost:8080/docs
 - **API docs JSON** : http://localhost:8080/v3/api-docs
+
+### Lancer uniquement le frontend en Docker
+
+Si le backend est déjà lancé, vous pouvez démarrer seulement le front :
+
+```bash
+docker-compose up -d gacha-frontend
+```
+
+Puis ouvrir : http://localhost:5173
 
 ---
 
